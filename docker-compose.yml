@@ -1,0 +1,25 @@
+services:
+  postgres:
+    image: postgres:18
+    container_name: cloudtask-postgres
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_USER: cloudtask
+      POSTGRES_PASSWORD: cloudtask_dev
+      POSTGRES_DB: cloudtask_db
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - cloudtask_postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cloudtask -d cloudtask"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  cloudtask_postgres_data:
