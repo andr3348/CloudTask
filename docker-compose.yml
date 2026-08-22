@@ -13,7 +13,7 @@ services:
       - "5432:5432"
 
     volumes:
-      - cloudtask_postgres_data:/var/lib/postgresql/data
+      - cloudtask_postgres_data:/var/lib/postgresql
 
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U cloudtask -d cloudtask"]
