@@ -1,3 +1,3 @@
 export { PrismaPgClient } from "./client-pg.js";
 
-export * from "./generated/pg/client.js";
+export * from "./generated/prisma/client.js";
