@@ -3,4 +3,4 @@ node_modules
 .env
 
 /generated/prisma
-src/generated/pg
+src/generated
