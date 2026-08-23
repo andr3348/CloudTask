@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import {
   type ITaskRepository,
   TASK_REPOSITORY,
@@ -12,7 +12,10 @@ export class DeleteTaskUseCase {
   ) {}
 
   async execute(id: number): Promise<void> {
-    await this.taskRepo.findById(id); // throws NotFoundException (404) if task not found
+    const task = await this.taskRepo.findById(id);
+    if (!task) {
+      throw new NotFoundException(`Task with id ${id} not found`);
+    }
     await this.taskRepo.delete(id);
   }
 }
