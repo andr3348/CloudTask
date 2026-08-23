@@ -1,18 +1,21 @@
 import { TaskEntity } from '../entity/task.entity';
 
+export type TaskStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
+export type TaskPriority = 'LOW' | 'MEDIUM' | 'HIGH';
+
 export interface CreateTaskInput {
   title: string;
   description?: string | null;
-  status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | null;
-  priority?: 'LOW' | 'MEDIUM' | 'HIGH' | null;
+  status?: TaskStatus | null;
+  priority?: TaskPriority | null;
   dueDate?: Date | null;
 }
 
 export interface UpdateTaskInput {
   title: string;
   description?: string | null;
-  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
-  priority: 'LOW' | 'MEDIUM' | 'HIGH';
+  status: TaskStatus;
+  priority: TaskPriority;
   dueDate?: Date | null;
 }
 
