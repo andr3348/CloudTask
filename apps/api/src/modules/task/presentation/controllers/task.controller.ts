@@ -5,7 +5,6 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  Patch,
   Post,
   Put,
 } from '@nestjs/common';
@@ -15,8 +14,8 @@ import { CreateTaskUseCase } from '../../application/use-cases/create-task.use-c
 import { UpdateTaskUseCase } from '../../application/use-cases/update-task.use-case';
 import { DeleteTaskUseCase } from '../../application/use-cases/delete-task.use-case';
 import { CreateTaskDto } from '../dtos/create-task.dto';
-import { TaskEntity } from '../../domain/entity/task.entity';
 import { UpdateTaskDto } from '../dtos/update-task.dto';
+import { TaskDto } from '../dtos/task.dto';
 
 @Controller('tasks')
 export class TaskController {
@@ -31,30 +30,30 @@ export class TaskController {
   @Get(':id')
   async findById(
     @Param('id', ParseIntPipe) id: number,
-  ): Promise<TaskEntity | null> {
+  ): Promise<TaskDto | null> {
     const task = await this.getTask.execute(id);
-    return task;
+    return task ? TaskDto.fromEntity(task) : null;
   }
 
   @Get()
-  async findAll(): Promise<TaskEntity[]> {
+  async findAll(): Promise<TaskDto[]> {
     const tasks = await this.listTasks.execute();
-    return tasks;
+    return tasks.map((task) => TaskDto.fromEntity(task));
   }
 
   @Post()
-  async create(@Body() dto: CreateTaskDto): Promise<TaskEntity> {
+  async create(@Body() dto: CreateTaskDto): Promise<TaskDto> {
     const task = await this.createTask.execute(dto);
-    return task;
+    return TaskDto.fromEntity(task);
   }
 
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateTaskDto,
-  ): Promise<TaskEntity> {
+  ): Promise<TaskDto> {
     const task = await this.updateTask.execute(id, dto);
-    return task;
+    return TaskDto.fromEntity(task);
   }
 
   @Delete(':id')
