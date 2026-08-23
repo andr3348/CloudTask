@@ -92,7 +92,9 @@ List all tasks.
     "description": "My first task",
     "status": "PENDING",
     "priority": "HIGH",
-    "dueDate": "2026-09-01T12:00:00.000Z"
+    "dueDate": "2026-09-01T12:00:00.000Z",
+    "createdAt": "2026-08-22T20:00:00.000Z",
+    "updatedAt": "2026-08-22T20:00:00.000Z"
   }
 ]
 ```
