@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -27,7 +28,9 @@ export class TaskController {
   ) {}
 
   @Get(':id')
-  async findById(@Param('id') id: number): Promise<TaskEntity | null> {
+  async findById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<TaskEntity | null> {
     const task = await this.getTask.execute(id);
     return task;
   }
@@ -46,7 +49,7 @@ export class TaskController {
 
   @Patch(':id')
   async update(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateTaskDto,
   ): Promise<TaskEntity> {
     const task = await this.updateTask.execute(id, dto);
@@ -54,7 +57,7 @@ export class TaskController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: number): Promise<void> {
+  async delete(@Param('id', ParseIntPipe) id: number): Promise<void> {
     await this.deleteTask.execute(id);
   }
 }
