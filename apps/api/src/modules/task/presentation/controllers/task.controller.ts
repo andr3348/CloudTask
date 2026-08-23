@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { GetTaskUseCase } from '../../application/use-cases/get-task.use-case';
 import { ListTasksUseCase } from '../../application/use-cases/list-tasks.use-case';
@@ -47,7 +48,7 @@ export class TaskController {
     return task;
   }
 
-  @Patch(':id')
+  @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() dto: UpdateTaskDto,

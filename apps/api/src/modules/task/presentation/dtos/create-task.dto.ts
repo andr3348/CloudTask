@@ -6,6 +6,7 @@ import {
   IsString,
   Length,
 } from 'class-validator';
+import { Type } from 'class-transformer';
 import {
   type TaskPriority,
   type TaskStatus,
@@ -33,6 +34,7 @@ export class CreateTaskDto {
   priority?: TaskPriority;
 
   @IsOptional()
+  @Type(() => Date)
   @IsDate()
   dueDate?: Date;
 }
