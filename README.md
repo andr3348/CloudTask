@@ -1,14 +1,13 @@
-# Turborepo starter
+# CloudTask
 
-This Turborepo starter is maintained by the Turborepo core team.
+Monorepo de gestión de tareas con **NestJS**, **Next.js 16**, **Prisma** y **PostgreSQL**.
 
-## Using this example
+## 🚀 Guía de Inicio Rápido
 
-Run the following command:
+Para instrucciones detalladas sobre cómo configurar las variables de entorno (`.env`) y arrancar el proyecto tras clonarlo, consulta:
+👉 **[Guía de Instalación y Configuración (docs/setup.md)](docs/setup.md)**
 
-```sh
-npx create-turbo@latest
-```
+---
 
 ## What's inside?
 
