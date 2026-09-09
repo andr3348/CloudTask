@@ -5,6 +5,7 @@ export interface TaskEntityProps {
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
   dueDate: Date | null;
+  imgUrl?: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,6 +35,10 @@ export class TaskEntity {
 
   get dueDate(): Date | null {
     return this.props.dueDate;
+  }
+
+  get imgUrl(): string | null {
+    return this.props.imgUrl ?? null;
   }
 
   get createdAt(): Date {

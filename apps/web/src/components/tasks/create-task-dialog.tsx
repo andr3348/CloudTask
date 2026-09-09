@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { CreateTaskInput, TaskStatus, TaskPriority } from "@/lib/api/types";
+import { uploadImage } from "@/lib/api/api";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +21,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ImageIcon, XIcon, Loader2Icon } from "lucide-react";
+import { toast } from "sonner";
 
 interface CreateTaskDialogProps {
   open: boolean;
@@ -39,10 +42,49 @@ export function CreateTaskDialog({
   const [status, setStatus] = useState<TaskStatus>("PENDING");
   const [priority, setPriority] = useState<TaskPriority>("MEDIUM");
   const [dueDate, setDueDate] = useState("");
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Por favor selecciona un archivo de imagen");
+        return;
+      }
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  }
+
+  function removeImage() {
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setImageFile(null);
+    setImagePreview(null);
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!title.trim()) return;
+
+    let imgUrl: string | null = null;
+    if (imageFile) {
+      setIsUploading(true);
+      try {
+        const uploadRes = await uploadImage(imageFile);
+        imgUrl = uploadRes.url;
+      } catch (err) {
+        toast.error(
+          err instanceof Error ? err.message : "Error al subir la imagen a S3",
+        );
+        setIsUploading(false);
+        return;
+      }
+      setIsUploading(false);
+    }
 
     onSubmit({
       title: title.trim(),
@@ -50,6 +92,7 @@ export function CreateTaskDialog({
       status,
       priority,
       dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+      imgUrl,
     });
   }
 
@@ -59,12 +102,15 @@ export function CreateTaskDialog({
     setStatus("PENDING");
     setPriority("MEDIUM");
     setDueDate("");
+    removeImage();
   }
 
   function handleOpenChange(nextOpen: boolean) {
     if (!nextOpen) resetForm();
     onOpenChange(nextOpen);
   }
+
+  const busy = isCreating || isUploading;
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
@@ -110,11 +156,58 @@ export function CreateTaskDialog({
             />
           </div>
 
+          {/* Image Upload */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium">Imagen de la tarea</label>
+            {imagePreview ? (
+              <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border bg-muted/30">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={imagePreview}
+                  alt="Vista previa"
+                  className="h-full w-full object-cover"
+                />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="icon-xs"
+                  className="absolute top-2 right-2 rounded-full"
+                  onClick={removeImage}
+                >
+                  <XIcon className="size-3.5" />
+                </Button>
+              </div>
+            ) : (
+              <label
+                htmlFor="create-image-upload"
+                className="flex flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed border-border py-4 text-sm text-muted-foreground hover:bg-muted/40 cursor-pointer transition-colors"
+              >
+                <ImageIcon className="size-6 text-muted-foreground/70" />
+                <span className="font-medium text-foreground">
+                  Seleccionar imagen
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  PNG, JPG o WEBP (máx. 10MB)
+                </span>
+                <input
+                  id="create-image-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </label>
+            )}
+          </div>
+
           {/* Status & Priority row */}
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium">Estado</label>
-              <Select value={status} onValueChange={(v) => setStatus(v as TaskStatus)}>
+              <Select
+                value={status}
+                onValueChange={(v) => setStatus(v as TaskStatus)}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
@@ -128,7 +221,10 @@ export function CreateTaskDialog({
 
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium">Prioridad</label>
-              <Select value={priority} onValueChange={(v) => setPriority(v as TaskPriority)}>
+              <Select
+                value={priority}
+                onValueChange={(v) => setPriority(v as TaskPriority)}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
@@ -159,11 +255,19 @@ export function CreateTaskDialog({
               type="button"
               variant="outline"
               onClick={() => handleOpenChange(false)}
+              disabled={busy}
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={!title.trim() || isCreating}>
-              {isCreating ? "Creando..." : "Crear Tarea"}
+            <Button type="submit" disabled={!title.trim() || busy}>
+              {busy ? (
+                <>
+                  <Loader2Icon className="size-4 animate-spin mr-2" />
+                  {isUploading ? "Subiendo a S3..." : "Creando..."}
+                </>
+              ) : (
+                "Crear Tarea"
+              )}
             </Button>
           </DialogFooter>
         </form>

@@ -3,6 +3,23 @@ import { Task, CreateTaskInput, UpdateTaskInput } from "./types";
 export const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
 
+export async function uploadImage(file: File): Promise<{ url: string }> {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const res = await fetch(`${API_BASE_URL}/tasks/upload`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => null);
+    throw new Error(err?.message || "Error al subir la imagen");
+  }
+
+  return res.json();
+}
+
 export async function fetchTasks(): Promise<Task[]> {
   const res = await fetch(`${API_BASE_URL}/tasks`, { cache: "no-store" });
   if (!res.ok) throw new Error("Error al obtener las tareas");

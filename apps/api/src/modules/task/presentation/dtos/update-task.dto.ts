@@ -35,4 +35,8 @@ export class UpdateTaskDto {
   @Type(() => Date)
   @IsDate()
   dueDate?: Date;
+
+  @IsOptional()
+  @IsString()
+  imgUrl?: string | null;
 }
