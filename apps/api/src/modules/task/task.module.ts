@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PrismaModule } from '../prisma/prisma.module';
+import { S3Module } from '../s3/s3.module';
 import { TaskController } from './presentation/controllers/task.controller';
 import { ListTasksUseCase } from './application/use-cases/list-tasks.use-case';
 import { GetTaskUseCase } from './application/use-cases/get-task.use-case';
@@ -10,7 +11,7 @@ import { TASK_REPOSITORY } from './domain/repository/task.repository.interface';
 import { PrismaTaskRepository } from './infrastructure/repository/prisma-task.repository';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, S3Module],
   controllers: [TaskController],
   providers: [
     ListTasksUseCase,

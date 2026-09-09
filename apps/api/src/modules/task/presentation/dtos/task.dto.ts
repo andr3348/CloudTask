@@ -7,6 +7,7 @@ export class TaskDto {
   status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
   priority: 'LOW' | 'MEDIUM' | 'HIGH';
   dueDate?: Date | null;
+  imgUrl?: string | null;
   createdAt: Date;
   updatedAt: Date;
 
@@ -18,6 +19,7 @@ export class TaskDto {
     dto.status = entity.status;
     dto.priority = entity.priority;
     dto.dueDate = entity.dueDate;
+    dto.imgUrl = entity.imgUrl;
     dto.createdAt = entity.createdAt;
     dto.updatedAt = entity.updatedAt;
     return dto;

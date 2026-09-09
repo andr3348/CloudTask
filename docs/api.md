@@ -71,12 +71,27 @@ Returns a greeting.
   "status": "PENDING",
   "priority": "HIGH",
   "dueDate": "2026-09-01T12:00:00.000Z",
+  "imgUrl": "https://taskcloud2.s3.us-east-1.amazonaws.com/tasks/1788988591-photo.png",
   "createdAt": "2026-08-22T20:00:00.000Z",
   "updatedAt": "2026-08-22T20:00:00.000Z"
 }
 ```
 
-Nullable fields: `description` and `dueDate` are `null` when not provided.
+Nullable fields: `description`, `dueDate`, and `imgUrl` are `null` when not provided.
+
+### `POST /api/tasks/upload`
+
+Upload an image to AWS S3 bucket (`taskcloud2`).
+
+**Request body**
+- `multipart/form-data` with form field `file` containing the image file (JPG, PNG, WEBP, max 10MB).
+
+**Response** `201`
+```json
+{
+  "url": "https://taskcloud2.s3.us-east-1.amazonaws.com/tasks/1788988591-photo.png"
+}
+```
 
 ### `GET /api/tasks`
 
@@ -124,6 +139,7 @@ Create a task.
 | `status`      | enum                    | no       | see [Enums](#enums)                            | `PENDING` |
 | `priority`    | enum                    | no       | see [Enums](#enums)                            | `MEDIUM`  |
 | `dueDate`     | ISO date string \| null | no       | valid date (e.g. `"2026-09-01T12:00:00.000Z"`) | `null`    |
+| `imgUrl`      | string \| null          | no       | valid URL to image in S3                       | `null`    |
 
 ```bash
 curl -X POST http://localhost:3001/api/tasks \
@@ -133,7 +149,8 @@ curl -X POST http://localhost:3001/api/tasks \
     "description": "My first task",
     "status": "PENDING",
     "priority": "HIGH",
-    "dueDate": "2026-09-01T12:00:00.000Z"
+    "dueDate": "2026-09-01T12:00:00.000Z",
+    "imgUrl": "https://taskcloud2.s3.us-east-1.amazonaws.com/tasks/my-image.png"
   }'
 ```
 
@@ -147,7 +164,7 @@ curl -X POST http://localhost:3001/api/tasks \
 
 Replace a task. This is a full replacement, not a partial update — send every field that defines the task's desired state.
 
-> Omitted optional fields (`description`, `dueDate`) are reset to `null`.
+> Omitted optional fields (`description`, `dueDate`, `imgUrl`) are reset to `null`. If `imgUrl` is replaced or removed, the old image is automatically deleted from S3.
 
 **Request body**
 
@@ -158,6 +175,7 @@ Replace a task. This is a full replacement, not a partial update — send every 
 | `status`      | enum                    | yes      | see [Enums](#enums)                   |
 | `priority`    | enum                    | yes      | see [Enums](#enums)                   |
 | `dueDate`     | ISO date string \| null | no       | valid date; omitted/null clears it    |
+| `imgUrl`      | string \| null          | no       | S3 URL; omitted/null clears it        |
 
 ```bash
 curl -X PUT http://localhost:3001/api/tasks/1 \

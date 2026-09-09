@@ -8,6 +8,7 @@ export interface Task {
   status: TaskStatus;
   priority: TaskPriority;
   dueDate: string | null;
+  imgUrl?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -18,6 +19,7 @@ export interface CreateTaskInput {
   status?: TaskStatus;
   priority?: TaskPriority;
   dueDate?: string | null;
+  imgUrl?: string | null;
 }
 
 export interface UpdateTaskInput {
@@ -26,4 +28,5 @@ export interface UpdateTaskInput {
   status: TaskStatus;
   priority: TaskPriority;
   dueDate?: string | null;
+  imgUrl?: string | null;
 }

@@ -45,6 +45,12 @@ cp apps/api/.env.example apps/api/.env
 DATABASE_URL="postgres://usuario:contraseña@localhost:5432/task_db"
 PORT=3001
 FRONTEND_URL="http://localhost:3000"
+
+# Credenciales AWS S3 para almacenamiento de imágenes
+AWS_ACCESS_KEY_ID="tu_aws_access_key_id"
+AWS_SECRET_ACCESS_KEY="tu_aws_secret_access_key"
+AWS_REGION="us-east-1"
+AWS_S3_BUCKET="taskcloud2"
 ```
 
 ---

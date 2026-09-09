@@ -87,6 +87,7 @@ export function TaskList() {
         status: newStatus,
         priority: task.priority,
         dueDate: task.dueDate,
+        imgUrl: task.imgUrl,
       });
       setTasks((prev) => prev.map((t) => (t.id === task.id ? updated : t)));
       toast.success(`Estado cambiado a ${newStatus === "PENDING" ? "Pendiente" : newStatus === "IN_PROGRESS" ? "En Progreso" : "Completada"}`);

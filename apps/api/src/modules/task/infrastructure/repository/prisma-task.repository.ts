@@ -31,6 +31,7 @@ export class PrismaTaskRepository implements ITaskRepository {
         status: input.status ?? 'PENDING',
         priority: input.priority ?? 'MEDIUM',
         dueDate: input.dueDate ?? null,
+        imgUrl: input.imgUrl ?? null,
       },
     });
     return new TaskEntity(task);
@@ -45,6 +46,7 @@ export class PrismaTaskRepository implements ITaskRepository {
         status: input.status,
         priority: input.priority,
         dueDate: input.dueDate ?? null,
+        imgUrl: input.imgUrl ?? null,
       },
     });
     return new TaskEntity(task);

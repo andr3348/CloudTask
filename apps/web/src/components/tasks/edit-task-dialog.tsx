@@ -1,7 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Task, UpdateTaskInput, TaskStatus, TaskPriority } from "@/lib/api/types";
+import {
+  Task,
+  UpdateTaskInput,
+  TaskStatus,
+  TaskPriority,
+} from "@/lib/api/types";
+import { uploadImage } from "@/lib/api/api";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ImageIcon, XIcon, Loader2Icon, RefreshCwIcon } from "lucide-react";
+import { toast } from "sonner";
 
 interface EditTaskDialogProps {
   task: Task | null;
@@ -42,6 +50,11 @@ export function EditTaskDialog({
   const [priority, setPriority] = useState<TaskPriority>("MEDIUM");
   const [dueDate, setDueDate] = useState("");
 
+  const [currentImgUrl, setCurrentImgUrl] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
+
   // Pre-fill form when task changes
   useEffect(() => {
     if (task) {
@@ -50,16 +63,55 @@ export function EditTaskDialog({
       setStatus(task.status);
       setPriority(task.priority);
       setDueDate(
-        task.dueDate
-          ? new Date(task.dueDate).toISOString().split("T")[0]
-          : ""
+        task.dueDate ? new Date(task.dueDate).toISOString().split("T")[0] : "",
       );
+      setCurrentImgUrl(task.imgUrl ?? null);
+      setImageFile(null);
+      setImagePreview(null);
     }
   }, [task]);
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Por favor selecciona un archivo de imagen");
+        return;
+      }
+      if (imagePreview) URL.revokeObjectURL(imagePreview);
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+      setCurrentImgUrl(null);
+    }
+  }
+
+  function removeImage() {
+    if (imagePreview) URL.revokeObjectURL(imagePreview);
+    setImageFile(null);
+    setImagePreview(null);
+    setCurrentImgUrl(null);
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!task || !title.trim()) return;
+
+    let finalImgUrl: string | null = currentImgUrl;
+
+    if (imageFile) {
+      setIsUploading(true);
+      try {
+        const uploadRes = await uploadImage(imageFile);
+        finalImgUrl = uploadRes.url;
+      } catch (err) {
+        toast.error(
+          err instanceof Error ? err.message : "Error al subir la imagen a S3",
+        );
+        setIsUploading(false);
+        return;
+      }
+      setIsUploading(false);
+    }
 
     onSubmit(task.id, {
       title: title.trim(),
@@ -67,8 +119,12 @@ export function EditTaskDialog({
       status,
       priority,
       dueDate: dueDate ? new Date(dueDate).toISOString() : null,
+      imgUrl: finalImgUrl,
     });
   }
+
+  const busy = isUpdating || isUploading;
+  const activeImage = imagePreview || currentImgUrl;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -114,11 +170,75 @@ export function EditTaskDialog({
             />
           </div>
 
+          {/* Image Section */}
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium">Imagen de la tarea</label>
+            {activeImage ? (
+              <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border bg-muted/30">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={activeImage}
+                  alt="Vista previa"
+                  className="h-full w-full object-cover"
+                />
+                <div className="absolute top-2 right-2 flex gap-1.5">
+                  <label
+                    htmlFor="edit-image-replace"
+                    className="flex size-7 items-center justify-center rounded-full bg-background/80 hover:bg-background cursor-pointer text-foreground shadow transition-colors"
+                    title="Cambiar imagen"
+                  >
+                    <RefreshCwIcon className="size-3.5" />
+                    <input
+                      id="edit-image-replace"
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageChange}
+                    />
+                  </label>
+                  <Button
+                    type="button"
+                    variant="destructive"
+                    size="icon-xs"
+                    className="size-7 rounded-full"
+                    onClick={removeImage}
+                    title="Eliminar imagen"
+                  >
+                    <XIcon className="size-3.5" />
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <label
+                htmlFor="edit-image-upload"
+                className="flex flex-col items-center justify-center gap-1.5 rounded-lg border border-dashed border-border py-4 text-sm text-muted-foreground hover:bg-muted/40 cursor-pointer transition-colors"
+              >
+                <ImageIcon className="size-6 text-muted-foreground/70" />
+                <span className="font-medium text-foreground">
+                  Agregar una imagen
+                </span>
+                <span className="text-xs text-muted-foreground">
+                  PNG, JPG o WEBP (máx. 10MB)
+                </span>
+                <input
+                  id="edit-image-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageChange}
+                />
+              </label>
+            )}
+          </div>
+
           {/* Status & Priority row */}
           <div className="grid grid-cols-2 gap-3">
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium">Estado</label>
-              <Select value={status} onValueChange={(v) => setStatus(v as TaskStatus)}>
+              <Select
+                value={status}
+                onValueChange={(v) => setStatus(v as TaskStatus)}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
@@ -132,7 +252,10 @@ export function EditTaskDialog({
 
             <div className="flex flex-col gap-1.5">
               <label className="text-sm font-medium">Prioridad</label>
-              <Select value={priority} onValueChange={(v) => setPriority(v as TaskPriority)}>
+              <Select
+                value={priority}
+                onValueChange={(v) => setPriority(v as TaskPriority)}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>
@@ -163,11 +286,19 @@ export function EditTaskDialog({
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
+              disabled={busy}
             >
               Cancelar
             </Button>
-            <Button type="submit" disabled={!title.trim() || isUpdating}>
-              {isUpdating ? "Guardando..." : "Guardar Cambios"}
+            <Button type="submit" disabled={!title.trim() || busy}>
+              {busy ? (
+                <>
+                  <Loader2Icon className="size-4 animate-spin mr-2" />
+                  {isUploading ? "Subiendo a S3..." : "Guardando..."}
+                </>
+              ) : (
+                "Guardar Cambios"
+              )}
             </Button>
           </DialogFooter>
         </form>

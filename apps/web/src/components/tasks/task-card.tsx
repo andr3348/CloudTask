@@ -69,9 +69,20 @@ export function TaskCard({ task, onDelete, onEdit, onStatusChange }: TaskCardPro
 
   return (
     <Card
-      className="break-inside-avoid mb-4 bg-card hover:ring-foreground/20 transition-all cursor-pointer"
+      className="break-inside-avoid mb-4 bg-card hover:ring-foreground/20 transition-all cursor-pointer overflow-hidden"
       onClick={() => onEdit(task)}
     >
+      {task.imgUrl && (
+        <div className="relative aspect-video w-full overflow-hidden bg-muted/30">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={task.imgUrl}
+            alt={task.title}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover/card:scale-105"
+            loading="lazy"
+          />
+        </div>
+      )}
       <CardHeader>
         <CardTitle className="line-clamp-2">{task.title}</CardTitle>
         <CardAction>

@@ -7,7 +7,11 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  UploadedFile,
+  UseInterceptors,
+  BadRequestException,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { GetTaskUseCase } from '../../application/use-cases/get-task.use-case';
 import { ListTasksUseCase } from '../../application/use-cases/list-tasks.use-case';
 import { CreateTaskUseCase } from '../../application/use-cases/create-task.use-case';
@@ -16,6 +20,7 @@ import { DeleteTaskUseCase } from '../../application/use-cases/delete-task.use-c
 import { CreateTaskDto } from '../dtos/create-task.dto';
 import { UpdateTaskDto } from '../dtos/update-task.dto';
 import { TaskDto } from '../dtos/task.dto';
+import { S3Service } from '../../../s3/s3.service';
 
 @Controller('tasks')
 export class TaskController {
@@ -25,7 +30,29 @@ export class TaskController {
     private readonly createTask: CreateTaskUseCase,
     private readonly updateTask: UpdateTaskUseCase,
     private readonly deleteTask: DeleteTaskUseCase,
+    private readonly s3Service: S3Service,
   ) {}
+
+  @Post('upload')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      limits: { fileSize: 10 * 1024 * 1024 }, // 10MB
+    }),
+  )
+  async uploadImage(
+    @UploadedFile() file?: Express.Multer.File,
+  ): Promise<{ url: string }> {
+    if (!file) {
+      throw new BadRequestException('No image file provided');
+    }
+
+    if (!file.mimetype.startsWith('image/')) {
+      throw new BadRequestException('Only image files are allowed');
+    }
+
+    const url = await this.s3Service.uploadFile(file);
+    return { url };
+  }
 
   @Get(':id')
   async findById(
