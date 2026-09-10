@@ -1,0 +1,12 @@
+node_modules
+.next
+dist
+build
+coverage
+.git
+.gitignore
+.env
+.env.local
+*.log
+.turbo
+repomix-output.xml
