@@ -16,14 +16,19 @@ RUN pnpm --filter @cloudtask/api build
 # ---- runner ----
 FROM base AS runner
 ENV NODE_ENV=production
+ENV PORT=3001
 WORKDIR /app
+
+COPY --from=builder /app/package.json /app/pnpm-workspace.yaml ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/packages ./packages
 COPY --from=builder /app/apps/api/dist ./apps/api/dist
 COPY --from=builder /app/apps/api/package.json ./apps/api/package.json
 COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
 COPY apps/api/entrypoint.sh ./apps/api/entrypoint.sh
+RUN chmod +x ./apps/api/entrypoint.sh
+
 WORKDIR /app/apps/api
 EXPOSE 3001
-ENV PORT=3001
+
 CMD ["sh", "entrypoint.sh"]
