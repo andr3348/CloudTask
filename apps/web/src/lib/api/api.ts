@@ -1,7 +1,8 @@
 import { Task, CreateTaskInput, UpdateTaskInput } from "./types";
 
-export const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+export const API_BASE_URL = (
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api"
+).replace(/\/+$/, "");
 
 export async function uploadImage(file: File): Promise<{ url: string }> {
   const formData = new FormData();

@@ -1,25 +1,56 @@
 services:
   postgres:
-    image: postgres:18
+    image: postgres:17-alpine
     container_name: cloudtask-postgres
     restart: unless-stopped
-
     environment:
-      POSTGRES_USER: cloudtask
-      POSTGRES_PASSWORD: cloudtask_dev
-      POSTGRES_DB: cloudtask_db
-
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: task_db
     ports:
       - "5432:5432"
-
     volumes:
-      - cloudtask_postgres_data:/var/lib/postgresql
-
+      - cloudtask_postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U cloudtask -d cloudtask"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d task_db"]
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: cloudtask-api
+    restart: unless-stopped
+    environment:
+      PORT: 3001
+      DATABASE_URL: "postgresql://postgres:123@postgres:5432/task_db?schema=public"
+      FRONTEND_URL: "http://localhost:3000"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      AWS_REGION: "${AWS_REGION:-us-east-1}"
+      AWS_S3_BUCKET: "${AWS_S3_BUCKET:-taskcloud2}"
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: "http://localhost:3001/api"
+    container_name: cloudtask-web
+    restart: unless-stopped
+    environment:
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
 
 volumes:
   cloudtask_postgres_data:
