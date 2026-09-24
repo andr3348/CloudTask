@@ -1,49 +1,37 @@
-# ==========================================
-# CloudTask Web - Multi-Stage Dockerfile
-# Next.js 16 (Standalone Output) in Monorepo
-# ==========================================
-
-# 1. Base stage with pnpm
+# ---- base ----
 FROM node:22-alpine AS base
-RUN corepack enable && corepack prepare pnpm@11.22.0 --activate
+RUN apk add --no-cache libc6-compat
+RUN npm install -g pnpm@11.22.0
+ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /app
 
-# 2. Dependencies installation
-FROM base AS deps
+# ---- builder ----
+FROM base AS builder
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json turbo.json ./
-COPY apps/web/package.json ./apps/web/
-
+COPY apps ./apps
+COPY packages ./packages
 RUN pnpm install --frozen-lockfile
 
-# 3. Build stage
-FROM deps AS builder
-COPY apps/web ./apps/web
-
-# Optional build arg for public API URL (defaults to relative /api behind ALB)
 ARG NEXT_PUBLIC_API_URL
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 
-# Build Next.js application with standalone output
 RUN pnpm --filter @cloudtask/web build
 
-# 4. Production Runner stage
-FROM node:22-alpine AS runner
-WORKDIR /app
-
+# ---- runner ----
+FROM base AS runner
 ENV NODE_ENV=production
 ENV PORT=3000
-ENV HOSTNAME="0.0.0.0"
+WORKDIR /app
 
-RUN addgroup --system --gid 1001 nodejs && \
-    adduser --system --uid 1001 nextjs
-
-# Copy static assets and standalone bundle
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/packages ./packages
+COPY --from=builder /app/apps/web/node_modules ./apps/web/node_modules
+COPY --from=builder /app/apps/web/.next ./apps/web/.next
 COPY --from=builder /app/apps/web/public ./apps/web/public
-COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/web/.next/static ./apps/web/.next/static
+COPY --from=builder /app/apps/web/package.json ./apps/web/package.json
+COPY --from=builder /app/apps/web/next.config.ts ./apps/web/next.config.ts
 
-USER nextjs
-
+WORKDIR /app/apps/web
 EXPOSE 3000
 
-CMD ["node", "apps/web/server.js"]
+CMD ["node", "node_modules/next/dist/bin/next", "start", "-p", "3000"]
