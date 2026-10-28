@@ -1,0 +1,29 @@
+$schema: https://azuremlschemas.azureedge.net/latest/automlJob.schema.json
+type: automl
+
+experiment_name: hw5-automobile-price
+display_name: automobile-price-automl
+description: Regresion para predecir el precio de automoviles (UCI Automobile, 201 filas)
+
+compute: azureml:cpu-cluster
+task: regression
+primary_metric: r2_score
+target_column_name: price
+
+training_data:
+  type: mltable
+  path: azureml:automobile-price:1
+n_cross_validations: 5
+
+limits:
+  timeout_minutes: 20
+  trial_timeout_minutes: 10
+  max_trials: 10
+  max_concurrent_trials: 2
+  enable_early_termination: true
+
+featurization:
+  mode: auto
+
+training:
+  enable_model_explainability: true

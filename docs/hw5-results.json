@@ -1,0 +1,10 @@
+{
+  "job_name": "serene_head_1hrtd6fdbz",
+  "model_name": "automobile-price-best",
+  "r2": "0.8939",
+  "rmse": "1950.35",
+  "mae": "1419.42",
+  "best_algorithm": "VotingEnsemble (ensamble de LightGBM, XGBoost, RandomForest y ElasticNet)",
+  "trials": "10",
+  "interpretation": "El modelo explica el 89,4 % de la variación del precio (R² = 0,894). El error típico es de USD 1.419 (MAE) y USD 1.950 (RMSE), sobre autos de USD 5.000 a 45.000 (MAPE 10,6 %). Es un resultado sólido para un dataset de solo 201 filas; la validación cruzada de 5 folds reduce el riesgo de sobreajuste."
+}
