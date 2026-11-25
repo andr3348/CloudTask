@@ -1,0 +1,868 @@
+{
+  "projectFileVersion": "2022-05-01",
+  "stringIndexType": "Utf16CodeUnit",
+  "metadata": {
+    "projectKind": "Conversation",
+    "settings": {
+      "confidenceThreshold": 0.0
+    },
+    "projectName": "hw8-restaurante-luis",
+    "multilingual": false,
+    "description": "Aplicacion CLU (sucesor de LUIS) para atencion de restaurante - HW8 SENATI",
+    "language": "es"
+  },
+  "assets": {
+    "projectKind": "Conversation",
+    "intents": [
+      {
+        "category": "RealizarPedido"
+      },
+      {
+        "category": "ConsultarMenu"
+      },
+      {
+        "category": "ReservarMesa"
+      },
+      {
+        "category": "ConsultarHorarioUbicacion"
+      },
+      {
+        "category": "CancelarPedido"
+      },
+      {
+        "category": "None"
+      }
+    ],
+    "entities": [
+      {
+        "category": "Plato"
+      },
+      {
+        "category": "Cantidad"
+      },
+      {
+        "category": "TipoServicio"
+      },
+      {
+        "category": "NumPersonas"
+      },
+      {
+        "category": "FechaHora"
+      }
+    ],
+    "utterances": [
+      {
+        "text": "Quisiera ordenar una pizza familiar de pepperoni para llevar",
+        "language": "es",
+        "intent": "RealizarPedido",
+        "entities": [
+          {
+            "category": "Cantidad",
+            "offset": 17,
+            "length": 3
+          },
+          {
+            "category": "Plato",
+            "offset": 21,
+            "length": 27
+          },
+          {
+            "category": "TipoServicio",
+            "offset": 49,
+            "length": 11
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Me envías dos hamburguesas clásicas por delivery",
+        "language": "es",
+        "intent": "RealizarPedido",
+        "entities": [
+          {
+            "category": "Cantidad",
+            "offset": 10,
+            "length": 3
+          },
+          {
+            "category": "Plato",
+            "offset": 14,
+            "length": 21
+          },
+          {
+            "category": "TipoServicio",
+            "offset": 40,
+            "length": 8
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Deseo pedir un lomo saltado y una chicha morada",
+        "language": "es",
+        "intent": "RealizarPedido",
+        "entities": [
+          {
+            "category": "Cantidad",
+            "offset": 12,
+            "length": 2
+          },
+          {
+            "category": "Plato",
+            "offset": 15,
+            "length": 12
+          },
+          {
+            "category": "Cantidad",
+            "offset": 30,
+            "length": 3
+          },
+          {
+            "category": "Plato",
+            "offset": 34,
+            "length": 13
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Voy a llevar tres empanadas de carne y dos gaseosas",
+        "language": "es",
+        "intent": "RealizarPedido",
+        "entities": [
+          {
+            "category": "Cantidad",
+            "offset": 13,
+            "length": 4
+          },
+          {
+            "category": "Plato",
+            "offset": 18,
+            "length": 18
+          },
+          {
+            "category": "Cantidad",
+            "offset": 39,
+            "length": 3
+          },
+          {
+            "category": "Plato",
+            "offset": 43,
+            "length": 8
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Mándame un ceviche mixto a domicilio por favor",
+        "language": "es",
+        "intent": "RealizarPedido",
+        "entities": [
+          {
+            "category": "Cantidad",
+            "offset": 8,
+            "length": 2
+          },
+          {
+            "category": "Plato",
+            "offset": 11,
+            "length": 13
+          },
+          {
+            "category": "TipoServicio",
+            "offset": 25,
+            "length": 11
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Quiero hacer un pedido de pollo a la brasa para comer en mesa",
+        "language": "es",
+        "intent": "RealizarPedido",
+        "entities": [
+          {
+            "category": "Plato",
+            "offset": 26,
+            "length": 16
+          },
+          {
+            "category": "TipoServicio",
+            "offset": 54,
+            "length": 7
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Dame 2 pizzas hawaianas grandes para recoger en tienda",
+        "language": "es",
+        "intent": "RealizarPedido",
+        "entities": [
+          {
+            "category": "Cantidad",
+            "offset": 5,
+            "length": 1
+          },
+          {
+            "category": "Plato",
+            "offset": 7,
+            "length": 24
+          },
+          {
+            "category": "TipoServicio",
+            "offset": 32,
+            "length": 22
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Quisiera pedir una causa rellena y un arroz con pollo",
+        "language": "es",
+        "intent": "RealizarPedido",
+        "entities": [
+          {
+            "category": "Cantidad",
+            "offset": 15,
+            "length": 3
+          },
+          {
+            "category": "Plato",
+            "offset": 19,
+            "length": 13
+          },
+          {
+            "category": "Cantidad",
+            "offset": 15,
+            "length": 2
+          },
+          {
+            "category": "Plato",
+            "offset": 38,
+            "length": 15
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Por favor agrégame una limonada frozen a mi orden",
+        "language": "es",
+        "intent": "RealizarPedido",
+        "entities": [
+          {
+            "category": "Cantidad",
+            "offset": 19,
+            "length": 3
+          },
+          {
+            "category": "Plato",
+            "offset": 23,
+            "length": 15
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Necesito pedir cuatro menús ejecutivos para la oficina",
+        "language": "es",
+        "intent": "RealizarPedido",
+        "entities": [
+          {
+            "category": "Cantidad",
+            "offset": 15,
+            "length": 6
+          },
+          {
+            "category": "Plato",
+            "offset": 22,
+            "length": 16
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Quiero ordenar un tiramisú y un café americano",
+        "language": "es",
+        "intent": "RealizarPedido",
+        "entities": [
+          {
+            "category": "Cantidad",
+            "offset": 15,
+            "length": 2
+          },
+          {
+            "category": "Plato",
+            "offset": 18,
+            "length": 8
+          },
+          {
+            "category": "Cantidad",
+            "offset": 15,
+            "length": 2
+          },
+          {
+            "category": "Plato",
+            "offset": 32,
+            "length": 14
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Me gustaría pedir una ensalada césar sin crutones",
+        "language": "es",
+        "intent": "RealizarPedido",
+        "entities": [
+          {
+            "category": "Cantidad",
+            "offset": 18,
+            "length": 3
+          },
+          {
+            "category": "Plato",
+            "offset": 22,
+            "length": 14
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Qué platos tienen disponibles en la carta?",
+        "language": "es",
+        "intent": "ConsultarMenu",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Muéstrame el menú del día por favor",
+        "language": "es",
+        "intent": "ConsultarMenu",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Qué opciones de almuerzo ofrecen hoy?",
+        "language": "es",
+        "intent": "ConsultarMenu",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Quisiera ver los precios de las pizzas y pastas",
+        "language": "es",
+        "intent": "ConsultarMenu",
+        "entities": [
+          {
+            "category": "Plato",
+            "offset": 32,
+            "length": 6
+          },
+          {
+            "category": "Plato",
+            "offset": 41,
+            "length": 6
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Tienen platos vegetarianos o sin gluten?",
+        "language": "es",
+        "intent": "ConsultarMenu",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Qué bebidas y postres hay en el restaurante?",
+        "language": "es",
+        "intent": "ConsultarMenu",
+        "entities": [
+          {
+            "category": "Plato",
+            "offset": 5,
+            "length": 7
+          },
+          {
+            "category": "Plato",
+            "offset": 15,
+            "length": 7
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Pásame la carta de entradas y fondos",
+        "language": "es",
+        "intent": "ConsultarMenu",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Cuánto cuesta el lomo saltado y qué incluye?",
+        "language": "es",
+        "intent": "ConsultarMenu",
+        "entities": [
+          {
+            "category": "Plato",
+            "offset": 18,
+            "length": 12
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Cuál es la especialidad de la casa hoy?",
+        "language": "es",
+        "intent": "ConsultarMenu",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Quisiera conocer los combos familiares disponibles",
+        "language": "es",
+        "intent": "ConsultarMenu",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Qué sabores de pizza manejan?",
+        "language": "es",
+        "intent": "ConsultarMenu",
+        "entities": [
+          {
+            "category": "Plato",
+            "offset": 16,
+            "length": 5
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Me indicas el menú ejecutivo de esta semana",
+        "language": "es",
+        "intent": "ConsultarMenu",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Quiero reservar una mesa para 4 personas hoy a las 8 pm",
+        "language": "es",
+        "intent": "ReservarMesa",
+        "entities": [
+          {
+            "category": "NumPersonas",
+            "offset": 30,
+            "length": 10
+          },
+          {
+            "category": "FechaHora",
+            "offset": 41,
+            "length": 14
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Tienen disponibilidad para reservar mañana a la 1 pm?",
+        "language": "es",
+        "intent": "ReservarMesa",
+        "entities": [
+          {
+            "category": "FechaHora",
+            "offset": 37,
+            "length": 16
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Necesito apartar una mesa para dos personas esta noche",
+        "language": "es",
+        "intent": "ReservarMesa",
+        "entities": [
+          {
+            "category": "NumPersonas",
+            "offset": 31,
+            "length": 12
+          },
+          {
+            "category": "FechaHora",
+            "offset": 44,
+            "length": 10
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Quisiera hacer una reservación el sábado por la noche para 6 personas",
+        "language": "es",
+        "intent": "ReservarMesa",
+        "entities": [
+          {
+            "category": "FechaHora",
+            "offset": 31,
+            "length": 22
+          },
+          {
+            "category": "NumPersonas",
+            "offset": 59,
+            "length": 10
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Sepárame un espacio en terraza el viernes a las 7 pm",
+        "language": "es",
+        "intent": "ReservarMesa",
+        "entities": [
+          {
+            "category": "FechaHora",
+            "offset": 31,
+            "length": 21
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Puedo reservar mesa para un grupo de 8 personas este domingo?",
+        "language": "es",
+        "intent": "ReservarMesa",
+        "entities": [
+          {
+            "category": "NumPersonas",
+            "offset": 38,
+            "length": 10
+          },
+          {
+            "category": "FechaHora",
+            "offset": 49,
+            "length": 12
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Deseo agendar una cena romántica para 2 personas a las 9 pm",
+        "language": "es",
+        "intent": "ReservarMesa",
+        "entities": [
+          {
+            "category": "NumPersonas",
+            "offset": 38,
+            "length": 10
+          },
+          {
+            "category": "FechaHora",
+            "offset": 49,
+            "length": 10
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Apártame una mesa cerca de la ventana para el almuerzo de mañana",
+        "language": "es",
+        "intent": "ReservarMesa",
+        "entities": [
+          {
+            "category": "FechaHora",
+            "offset": 58,
+            "length": 6
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Queremos reservar para 5 personas hoy a mediodía",
+        "language": "es",
+        "intent": "ReservarMesa",
+        "entities": [
+          {
+            "category": "NumPersonas",
+            "offset": 23,
+            "length": 10
+          },
+          {
+            "category": "FechaHora",
+            "offset": 34,
+            "length": 14
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Cómo hago una reserva para el próximo fin de semana?",
+        "language": "es",
+        "intent": "ReservarMesa",
+        "entities": [
+          {
+            "category": "FechaHora",
+            "offset": 28,
+            "length": 24
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿A qué hora abren los domingos?",
+        "language": "es",
+        "intent": "ConsultarHorarioUbicacion",
+        "entities": [
+          {
+            "category": "FechaHora",
+            "offset": 18,
+            "length": 12
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Dónde está ubicado el restaurante?",
+        "language": "es",
+        "intent": "ConsultarHorarioUbicacion",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Cuál es su dirección exacta y horario de atención?",
+        "language": "es",
+        "intent": "ConsultarHorarioUbicacion",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Hasta qué hora atienden hoy por la noche?",
+        "language": "es",
+        "intent": "ConsultarHorarioUbicacion",
+        "entities": [
+          {
+            "category": "FechaHora",
+            "offset": 25,
+            "length": 16
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Atienden los días feriados?",
+        "language": "es",
+        "intent": "ConsultarHorarioUbicacion",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Tienen local en Miraflores o San Isidro?",
+        "language": "es",
+        "intent": "ConsultarHorarioUbicacion",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿A qué hora cierran la cocina entre semana?",
+        "language": "es",
+        "intent": "ConsultarHorarioUbicacion",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Me compartes la ubicación para llegar al local",
+        "language": "es",
+        "intent": "ConsultarHorarioUbicacion",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Cuál es el horario de delivery?",
+        "language": "es",
+        "intent": "ConsultarHorarioUbicacion",
+        "entities": [
+          {
+            "category": "TipoServicio",
+            "offset": 23,
+            "length": 8
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Abren temprano para desayunos?",
+        "language": "es",
+        "intent": "ConsultarHorarioUbicacion",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Quiero cancelar mi pedido por favor",
+        "language": "es",
+        "intent": "CancelarPedido",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Necesito anular la orden de pizza que acabo de hacer",
+        "language": "es",
+        "intent": "CancelarPedido",
+        "entities": [
+          {
+            "category": "Plato",
+            "offset": 28,
+            "length": 5
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Por favor cancela el delivery, surgió un inconveniente",
+        "language": "es",
+        "intent": "CancelarPedido",
+        "entities": [
+          {
+            "category": "TipoServicio",
+            "offset": 21,
+            "length": 8
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Ya no voy a querer el pedido, deseo anularlo",
+        "language": "es",
+        "intent": "CancelarPedido",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Puedo cancelar mi orden de hamburguesas antes de que salga?",
+        "language": "es",
+        "intent": "CancelarPedido",
+        "entities": [
+          {
+            "category": "Plato",
+            "offset": 28,
+            "length": 12
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Anula mi solicitud actual, hice el pedido por error",
+        "language": "es",
+        "intent": "CancelarPedido",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Quisiera dar de baja la compra que registré hace un momento",
+        "language": "es",
+        "intent": "CancelarPedido",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Cancela el pedido número 452, gracias",
+        "language": "es",
+        "intent": "CancelarPedido",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "No envíen el lomo saltado, necesito cancelar",
+        "language": "es",
+        "intent": "CancelarPedido",
+        "entities": [
+          {
+            "category": "Plato",
+            "offset": 13,
+            "length": 12
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "Deseo suspender mi orden para llevar",
+        "language": "es",
+        "intent": "CancelarPedido",
+        "entities": [
+          {
+            "category": "TipoServicio",
+            "offset": 25,
+            "length": 11
+          }
+        ],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Cuál es la capital de Francia?",
+        "language": "es",
+        "intent": "None",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Cómo está el clima en Lima hoy?",
+        "language": "es",
+        "intent": "None",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Necesito ayuda para instalar Python en Fedora",
+        "language": "es",
+        "intent": "None",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿A qué hora juega la selección peruana?",
+        "language": "es",
+        "intent": "None",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Explícame qué es una base de datos relacional",
+        "language": "es",
+        "intent": "None",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Buenos días, ¿quién ganó el partido de ayer?",
+        "language": "es",
+        "intent": "None",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Cuánto vale el dólar hoy en Perú?",
+        "language": "es",
+        "intent": "None",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Recomiéndame una película de ciencia ficción",
+        "language": "es",
+        "intent": "None",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "¿Cómo llego al aeropuerto Jorge Chávez?",
+        "language": "es",
+        "intent": "None",
+        "entities": [],
+        "dataset": "Train"
+      },
+      {
+        "text": "Cuéntame un chiste corto",
+        "language": "es",
+        "intent": "None",
+        "entities": [],
+        "dataset": "Train"
+      }
+    ]
+  }
+}

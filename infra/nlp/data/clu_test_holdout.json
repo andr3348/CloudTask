@@ -1,0 +1,74 @@
+[
+  {
+    "text": "Quiero pedir una pizza",
+    "true_intent": "RealizarPedido"
+  },
+  {
+    "text": "Tráeme dos platos de ceviche para llevar",
+    "true_intent": "RealizarPedido"
+  },
+  {
+    "text": "Quisiera ordenar un pollo a la brasa por delivery",
+    "true_intent": "RealizarPedido"
+  },
+  {
+    "text": "Me gustaría pedir una chicha morada y tres empanadas",
+    "true_intent": "RealizarPedido"
+  },
+  {
+    "text": "¿Cuál es el menú de hoy?",
+    "true_intent": "ConsultarMenu"
+  },
+  {
+    "text": "¿Qué bebidas tienen en la carta?",
+    "true_intent": "ConsultarMenu"
+  },
+  {
+    "text": "Muéstrame los precios de las hamburguesas",
+    "true_intent": "ConsultarMenu"
+  },
+  {
+    "text": "Quiero reservar una mesa para 3 personas mañana a las 8 pm",
+    "true_intent": "ReservarMesa"
+  },
+  {
+    "text": "¿Tienen mesa libre hoy por la noche para dos?",
+    "true_intent": "ReservarMesa"
+  },
+  {
+    "text": "Necesito apartar una mesa este domingo",
+    "true_intent": "ReservarMesa"
+  },
+  {
+    "text": "¿Cuál es la dirección del restaurante?",
+    "true_intent": "ConsultarHorarioUbicacion"
+  },
+  {
+    "text": "¿A qué hora abren hoy?",
+    "true_intent": "ConsultarHorarioUbicacion"
+  },
+  {
+    "text": "¿Hasta qué hora hacen delivery los sábados?",
+    "true_intent": "ConsultarHorarioUbicacion"
+  },
+  {
+    "text": "Quiero cancelar el pedido que acabo de hacer",
+    "true_intent": "CancelarPedido"
+  },
+  {
+    "text": "Por favor anulen mi orden de pizza",
+    "true_intent": "CancelarPedido"
+  },
+  {
+    "text": "Ya no necesito el delivery, cancelen la compra",
+    "true_intent": "CancelarPedido"
+  },
+  {
+    "text": "¿Cuál es la fórmula del agua?",
+    "true_intent": "None"
+  },
+  {
+    "text": "¿Quién escribió Don Quijote de la Mancha?",
+    "true_intent": "None"
+  }
+]

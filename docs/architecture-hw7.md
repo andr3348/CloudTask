@@ -6,55 +6,11 @@ Dominio: **General (compact)** · Clasificación: **Multiclase (cats / dogs)**
 
 ## Diagrama
 
-```
-                 +----------------------------------------+
-                 |        Azure Portal / CLI               |
-                 |  (creación de recursos y claves)        |
-                 +-------------------+--------------------+
-                                     |
-        +----------------------------v-----------------------------+
-        |              Grupo de recursos rg-cloudtask-hw7          |
-        |                                                          |
-        |  +---------------------------+  +---------------------+  |
-        |  | Custom Vision Training    |  | Custom Vision       |  |
-        |  | cv-hw7-train-4632 (F0)      |  | Prediction          |  |
-        |  | endpoint + Training-Key   |  | cv-hw7-pred-4632 (F0)    |  |
-        |  +-------------+-------------+  +----------+----------+  |
-        |                |                           |             |
-        |                v                           |             |
-        |   +-------------------------------+        |             |
-        |   | Proyecto hw7-cats-vs-dogs     |        |             |
-        |   | 60 imágenes de entrenamiento  |        |             |
-        |   | (30 cats / 30 dogs)           |        |             |
-        |   | Etiquetas + iteración         |        |             |
-        |   | entrenada (quick training)    |        |             |
-        |   +---------------+---------------+        |             |
-        |                   |                        |             |
-        |          publica  v                        v             |
-        |   +-------------------------------+  +------------------+ |
-        |   | Iteration 1 (publicada)       |->| Predicción REST  | |
-        |   | métricas Precision/Recall/AP  |  | 20 imágenes test | |
-        |   +---------------+---------------+  +------------------+ |
-        |                   |                                      |
-        |                   v                                      |
-        |   +-------------------------------+                      |
-        |   | Exportación ONNX (zip)        |                      |
-        |   | modelo para borde             |                      |
-        |   +-------------------------------+                      |
-        +----------------------------------------------------------+
-```
+![Diagrama de arquitectura HW7](assets/hw7-architecture.png)
 
-```mermaid
-flowchart LR
-    U[CLI / Portal] --> T[Custom Vision Training F0]
-    U --> P[Custom Vision Prediction F0]
-    T --> J[Proyecto multiclase cats/dogs]
-    J --> I[Iteración entrenada]
-    I --> M[Métricas Precision / Recall / AP]
-    I --> E[Export ONNX]
-    I -->|publicar| P
-    P --> R[Predicciones REST]
-```
+Flujo: dataset local (60 imágenes de entrenamiento + 20 de hold-out) → Custom Vision Training (F0)
+→ proyecto multiclase `hw7-cats-vs-dogs` (etiquetas cats/dogs) → iteración entrenada con quick training
+→ publicación en Custom Vision Prediction (F0) → evaluación con 20 imágenes y exportación ONNX.
 
 ## Componentes
 
